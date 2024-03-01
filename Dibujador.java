@@ -4,26 +4,21 @@
  */
 package figschachipistachis;
 
-import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Rectangle;
 import java.awt.Shape;
-import java.awt.Stroke;
 import java.awt.TexturePaint;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.JPanel;
 
@@ -34,20 +29,20 @@ import javax.swing.JPanel;
 public class Dibujador {
 
     //Dios mio que desastre....
-    int defX = 200, defY = 200;
-    float defW = 200, defH = 200;
-    float adefW = 200, adefH = 200;
-    JPanel panel;
-    Graphics g;
-    Graphics2D g2d;
-    Shape shape;
-    boolean is_cylinder = false, is_deg = false, is_texture = false;
+    private int defX = 200, defY = 200;
+    private float defW = 200, defH = 200;
+    private float adefW = 200, adefH = 200;
+    private boolean is_cylinder = false, is_deg = false, is_texture = false;
+    private int selfig = 0, selLine = 0, selFill = 0;
+    private JPanel panel;
+    private Graphics g;
+    private Graphics2D g2d;
+    private Shape shape;
+    private Color colorFill = Color.WHITE;
+    private Color colorStroke = Color.BLACK;
+    private TexturePaint globalTexture;
     private Paint gpglobal;
-    Cylinder2D cylinder;
-    int selfig = 0, selLine = 0, selFill = 0;
-    Color colorFill = Color.WHITE;
-    Color colorStroke = Color.BLACK;
-    TexturePaint globalTexture;
+    private Cylinder2D cylinder;
 
     Dibujador(JPanel panel) {
         this.panel = panel;
@@ -62,7 +57,6 @@ public class Dibujador {
             int height = image.getHeight();
             globalTexture = new TexturePaint(image, new Rectangle(0, 0, width, height));
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -81,6 +75,7 @@ public class Dibujador {
     }
 
     public void fillFigura(int typeFill) {
+        if(shape == null)return;
         clearScreen();
         selFill = typeFill;
         switch (selFill) {
@@ -107,6 +102,7 @@ public class Dibujador {
     }
 
     public void lineFigura(int typeLine) {
+          if(shape == null)return;
         clearScreen();
         selLine = typeLine;
         float[] patron = {1f, 3f};
@@ -120,11 +116,12 @@ public class Dibujador {
         }
         redraw();
     }
-    
-    public void scaleFig(int scale){
+
+    public void scaleFig(int scale) {
+          if(shape == null)return;
         clearScreen();
-        defW = adefW * (scale/10f);
-        defH = adefH * (scale/10f);
+        defW = adefW * (scale / 10f);
+        defH = adefH * (scale / 10f);
         redraw();
     }
 
@@ -155,6 +152,21 @@ public class Dibujador {
         g2d.setColor(Color.WHITE);
         g2d.fillRect(0, 0, panel.getWidth(), panel.getHeight());
         g2d.setColor(colorFill);
+    }
+
+    public void resetValues() {
+        defW = 200;
+        defH = 200;
+        adefW = 200;
+        adefH = 200;
+        is_cylinder = false;
+        is_deg = false;
+        is_texture = false;
+        selfig = 0;
+        selLine = 0;
+        selFill = 0;
+        colorFill = Color.WHITE;
+        colorStroke = Color.BLACK;
     }
 
     public void redraw() {
@@ -193,9 +205,9 @@ public class Dibujador {
         Rectangle2D.Double rect;
 
         Cylinder2D() {
-            tapa = new Ellipse2D.Double(defX, defY, 100, 40);
-            base = new Ellipse2D.Double(defX, defY + 200, 100, 40);
-            rect = new Rectangle2D.Double(defX, defY + (0.1f * defY), 100, defH);
+            tapa = new Ellipse2D.Double(defX, defY, defW / 2f, defH / 4f);
+            base = new Ellipse2D.Double(defX, defY + defH, defW / 2f, defH / 4f);
+            rect = new Rectangle2D.Double(defX, defY + (0.1f * defY), defH / 2f, defH);
         }
 
         public void draw() {

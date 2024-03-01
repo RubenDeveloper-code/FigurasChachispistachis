@@ -331,6 +331,7 @@ public class Padre extends javax.swing.JFrame {
 
     private void clearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_clearMouseClicked
         drawer.clearScreen();
+        drawer.resetValues();
     }//GEN-LAST:event_clearMouseClicked
 
     private void jSlider1CaretPositionChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jSlider1CaretPositionChanged
